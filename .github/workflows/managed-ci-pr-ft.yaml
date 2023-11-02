@@ -1,0 +1,16 @@
+name: Managed CI Build and FT for PR
+
+on:
+  pull_request:
+    types: [ labeled,
+             # the 3 below are the regular (default) PR types
+             opened, reopened, synchronize
+           ]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  pr-build-and-ft:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    uses: glcp/managed-ci-workflow/.github/workflows/mci-pr-build.yaml@main
+    secrets: inherit
