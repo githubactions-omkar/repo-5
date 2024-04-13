@@ -1,0 +1,54 @@
+## Variables for Managed CI can be defined in this file. All the key value pairs are created as both "ENVIRONMENT VARIABLES" and "OUTPUTS" and can be used as required
+APP_NAME: account-management
+DEV_ENV_DIR: account-management-dev-env
+DC_PROJECT_NAME: account-management-ci
+RETENTION_DAYS: 90
+DEV_ENV_TAG: latest
+APP_ID: a8965612-527e-45b4-8ee9-616109cb79e5
+APP_ID_FIPS: 5e79e831-be1e-4ff5-891a-dffe1fce6f74
+APP_DIR: app
+CHANNEL: PR
+PR_VALIDATION: true
+VERSION_MAJOR: 3
+VERSION_MINOR: 0
+LINT_WORKSPACE_BACKUP: false  #(only needed if a backup of workspace is needed during linting)
+# Variables used only during UNIT TEST
+UNIT_TEST_WORKSPACE_BACKUP: false #(only needed if a backup of workspace is needed during unit testing)
+BASE_IMAGE_FIPS: quay.io/ccsportal/ubuntu:focal-python38-fips-latest-ma #workaround until the mci team provide the fix
+SONAR_HOST_URL: https://sonarqube.glcp.hpedev.net
+IMAGE_REGISTRIES:
+  - quay.io
+
+MULTI_BUILD: true
+PRODUCTS:
+- BUILD_TYPE: app
+  DOCKERFILE_PATH: ./docker/Dockerfile
+  IMAGE_REGISTRY: quay.io/ccsportal/account-management
+  TARGET: prod-image
+  APP_NAME: account-management
+  APP_ID: a8965612-527e-45b4-8ee9-616109cb79e5
+  BASE_IMAGE: quay.io/ccsportal/ubuntu:focal-python38-latest-ma
+  REGISTRY: quay.io
+  DOCKER_PUSH: true
+
+- BUILD_TYPE: app-fips
+  DOCKERFILE_PATH: ./docker/Dockerfile
+  IMAGE_REGISTRY: quay.io/ccsportal/account-management
+  TARGET: prod-image
+  TAG_EXTENSION: '-fips'
+  APP_NAME: account-management
+  APP_ID: 5e79e831-be1e-4ff5-891a-dffe1fce6f74
+  BASE_IMAGE: quay.io/ccsportal/ubuntu:focal-python38-fips-latest-ma
+  REGISTRY: quay.io
+  DOCKER_PUSH: true
+
+- BUILD_TYPE: automation
+  DOCKERFILE_PATH: ./tests/feature_test/docker/Dockerfile_FT
+  IMAGE_REGISTRY: quay.io/ccsportal/account-management
+  TARGET: automation-base
+  TAG_EXTENSION: '-automation'
+  APP_NAME: account-management
+  APP_ID: a8965612-527e-45b4-8ee9-616109cb79e5
+  REGISTRY: quay.io
+  BASE_IMAGE: quay.io/ccsportal/ubuntu:focal-python38-latest-ma
+  DOCKER_PUSH: true
